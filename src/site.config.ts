@@ -81,7 +81,7 @@ export const theme: ThemeUserConfig = {
     /** Enable displaying a “Astro & Pure theme powered” link in your site’s footer. */
     credits: true,
     /** Optional details about the social media accounts for this site. */
-    social: { github: 'https://github.com/MrFridge-frz' }
+    social: { github: 'https://github.com/Nonlotus-eater' }
   },
 
   content: {
@@ -116,7 +116,7 @@ export const integ: IntegrationUserConfig = {
     applyTip: [
       { name: 'Name', val: theme.title },
       { name: 'Desc', val: theme.description || 'Null' },
-      { name: 'Link', val: 'https://github.com/MrFridge-frz' },
+      { name: 'Link', val: 'https://github.com/Nonlotus-eater' },
       { name: 'Avatar', val: 'https://astro-pure.js.org/favicon/favicon.ico' }
     ]
   },
