@@ -7,6 +7,7 @@ import PageLayout from '@/layouts/CommonPage.astro'
 import FriendList from '@/components/links/FriendList.astro'
 
 const headings = [
+  { depth: 2, slug: 'blog-template-author', text: 'Blog Template Author' },
   { depth: 2, slug: 'common-links', text: 'Common Links' },
   { depth: 2, slug: 'special-links', text: 'Special Links' },
   { depth: 2, slug: 'apply-links', text: 'Apply Links' }
@@ -18,17 +19,22 @@ const linkEditPage = 'https://github.com/cworld1/astro-theme-pure/blob/main/publ
 ---
 
 <PageLayout title='Links' {headings} comment>
-  <p>怎么可能有顺序呢，当然是随机的~ It's random</p>
-  <h2 id='common-links'>Common Links</h2>
+  <p>友情链接展示，感谢这些优秀的博客作者和项目！</p>
+
+  <h2 id='blog-template-author'>Blog Template Author</h2>
   <FriendList list={friends[0]} />
+
+  <h2 id='common-links'>Common Links</h2>
+  <p>我的朋友们，目前还没有添加链接~</p>
+
   <Collapse title='Links with Bad Status'>
-    <FriendList list={friends[1]} />
+    <FriendList list={friends[2]} />
   </Collapse>
   <Collapse title='Link History Book'>
     <Timeline events={linksConf.logbook} />
   </Collapse>
   <h2 id='special-links'>Special Links</h2>
-  <FriendList list={friends[2]} />
+  <FriendList list={friends[3]} />
 
   <!-- apply-links -->
   <h2 id='apply-links'>Apply Links</h2>

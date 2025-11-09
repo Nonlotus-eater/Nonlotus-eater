@@ -1,8 +1,8 @@
 {
   "friends": [
     {
-      "id_name": "cf-links",
-      "desc": "Common links included in circle friends",
+      "id_name": "template-author-links",
+      "desc": "Blog template author links",
       "link_list": [
         {
           "name": "Arthals' ink",
@@ -17,6 +17,11 @@
           "avatar": "https://cravatar.cn/avatar/1ffe42aa45a6b1444a786b1f32dfa8aa?s=200"
         }
       ]
+    },
+    {
+      "id_name": "common-links",
+      "desc": "Common links included in circle friends",
+      "link_list": []
     },
     {
       "id_name": "inactive-links",
