@@ -6,8 +6,6 @@ tags: ["machine-learning", "deep-learning", "fine-tuning", "lora", "large-langua
 comment: true
 ---
 
-# LoRA Fine-tuning
-
 ## 数学原理
 
 首先设置$W_0 \in R^{d \times k}$为神经网络当前层的权重矩阵，其中$d$是上一层的输出维度，$k$是下一层的输入维度。
