@@ -38,11 +38,11 @@ h = W'x = W_0 x + BA x
 $$
 在微调的过程中，我们冻结t_0部分的权重，将矩阵A随机高斯初始化，将矩阵B零初始化，随后使用Adam优化器进行训练，最后将$W_0$与权重$BA$相加，得到优化后的参数。
 
-![LoRA Mechanism](\public\images\LoRA\LoRA_mechanism.png)
+![LoRA Mechanism](/images/LoRA/LoRA_mechanism.png)
 
 ### 应用于Transformer的情况
 
-![LoRA in Transformer](\public\images\LoRA\LoRA_in_Transformer.png)
+![LoRA in Transformer](/images/LoRA/LoRA_in_Transformer.png)
 
 LoRA在Transformer中主要应用于$W_Q,W_K,W_V \in \mathbb{R}^{d_{\text{model}} \times d_v}$与输出投影层$W_O \in \mathbb{R}^{d_v \times d_{\text{model}}}$四个矩阵，并冻结MLP矩阵中的权重。
 
