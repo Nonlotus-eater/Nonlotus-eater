@@ -32,15 +32,17 @@ comment: true
 
 ## 数学原理
 
-$$\theta_{\{*g\}} x = U \theta(\Lambda)U^T x$$
+$$
+\theta_\{*g} x = U \theta(\Lambda)U^T x
+$$
 
-其中$\theta_{\{*g\}}$表示图卷积算子，$\theta$表示滤波器，$*g$表示卷积核，$U$是输入数据的Laplace矩阵的特征向量矩阵，$\Lambda$是特征值对角阵。
+其中$\theta_\{*g}$表示图卷积算子，$\theta$表示滤波器，$*g$表示卷积核，$U$是输入数据的Laplace矩阵的特征向量矩阵，$\Lambda$是特征值对角阵。
 
 故$\theta(\Lambda)$可以理解为图数据的频域滤波操作，整个公式可以理解为对图数据进行频域滤波后再进行图傅里叶变换。
 
 其中对称归一化的Laplace矩阵满足以下性质：
 
-$$ L = I_n - D^{{-\frac{1}{2}}} W D^{{-\frac{1}{2}}}$$
+$$ L = I_n - D^\{-\frac{1}{2}} W D^\{-\frac{1}{2}}$$
 
 其中W为输入图的邻接矩阵，D为输入图的度矩阵。
 
@@ -50,16 +52,16 @@ $$ L = I_n - D^{{-\frac{1}{2}}} W D^{{-\frac{1}{2}}}$$
 图卷积使用到多项式的性质如下：
 
 $$
-对\forall x \in [-1,1], \exists f(x), 满足 f(x) \approx \Sigma_{\{k=0\}}^\infty \theta_k T_k(x)
+对\forall x \in [-1,1], \exists f(x), 满足 f(x) \approx \Sigma_\{k=0}^\infty \theta_k T_k(x)
 $$
 其中
 $$
-T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_{\{n+1\}}(x) = 2xT_n(x)-T_{\{n-1\}}(x)
+T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_\{n+1}(x) = 2xT_n(x)-T_\{n-1}(x)
 $$
 
 由Chebyshev多项式的性质，若要将$\theta(\Lambda)$当成多项式进行计算，需将$\Lambda$映射到$[-1,1]$，故对$\Lambda$进行如下操作：
 
 $$
-\tilde{\Lambda} = 2 \cdot \frac{\Lambda}{\lambda_{\{max\}}} - I_n
+\tilde\{\Lambda} = 2 \cdot \frac\{\Lambda}\{\lambda_\{max\}} - I_n
 $$
 </Aside>
