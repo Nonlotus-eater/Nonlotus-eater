@@ -85,17 +85,21 @@ $$
 故而$\theta_{*g}(x)$可以进行如下演算：
 
 $$
+\begin{aligned}
 \theta_{*g}(x) &= U \theta(\Lambda) U^T x \\
-            &= U [\Sigma_{k=0}^\infty \theta_k T_k(\tilde{\Lambda})] U^T x \\
-            &= \Sigma_{k=0}^\infty \theta_k [U T_k(\tilde{\Lambda}) U^T x] \\ 
-            &= \Sigma_{k=0}^\infty \theta_k [T_k(U \tilde{\Lambda} U^T)] x 
+&= U \left[\sum_{k=0}^\infty \theta_k T_k(\tilde{\Lambda})\right] U^T x \\
+&= \sum_{k=0}^\infty \theta_k \left[U T_k(\tilde{\Lambda}) U^T\right] x \\
+&= \sum_{k=0}^\infty \theta_k T_k(U \tilde{\Lambda} U^T) x
+\end{aligned}
 $$
 
 带入式一，可得：
 
 $$
-原式 &= \Sigma_{k=0}^\infty \theta_k [T_k(2 \cdot (\frac{L}{\lambda_{max}} - I_n))] x \\
-    &= \Sigma_{k=0}^\infty \theta_k T_k(\tilde{L}) x
+\begin{aligned}
+\text{原式} &= \sum_{k=0}^\infty \theta_k \left[T_k\left(2 \cdot \left(\frac{L}{\lambda_{\max}} - I_n\right)\right)\right] x \\
+    &= \sum_{k=0}^\infty \theta_k T_k(\tilde{L}) x
+\end{aligned}
 $$
 
 此时$T_k(\tilde{L})$是定值，可以直接计算。其中为什么$U T_k(\tilde{\Lambda}) U^T = T_k(\tilde{L})$, 可通过数学归纳法进行证明。
