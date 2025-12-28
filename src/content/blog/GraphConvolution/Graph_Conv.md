@@ -46,7 +46,7 @@ $$ L = I_n - D^{-\frac{1}{2}} W D^{-\frac{1}{2}}$$
 
 然而，$U \theta(\Lambda)U^T$的时间复杂度达到了$O(n^3)$，运算代价太大，最好的简化方法是将$\theta(\Lambda)$当成多项式进行计算，此时需要有一种能够近似频域滤波图的多项式，这里图卷积采用了Chebyshev多项式进行近似。
 
-### Chebyshev多项式
+<Aside type="note" title="Chebyshev多项式">
 图卷积使用到的性质如下：
 
 $$
@@ -62,7 +62,7 @@ $$
 $$
 \tilde{\Lambda} = 2 \cdot \frac{\Lambda}{\lambda_{max}} - I_n
 $$
-
-
-
+</Aside>
+111
+215154
 ## 代码
