@@ -1,5 +1,5 @@
 ---
-title: "GC-S Graph Condensation: A Survey"
+title: "GCond-S Graph Condensation: A Survey"
 description: "图压缩的学习笔记"
 publishDate: "2025-09-13"
 tags: ["Astro", "Blog"]
