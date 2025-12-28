@@ -73,10 +73,29 @@ $$
 $$
 T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_{n+1}(x) = 2xT_n(x)-T_{n-1}(x)
 $$
+</Aside>
+
 
 由Chebyshev多项式的性质，若要将$\theta(\Lambda)$当成多项式进行计算，需将$\Lambda$映射到$[-1,1]$，故对$\Lambda$进行如下操作：
 
 $$
-\tilde{\Lambda} = 2 \cdot \frac{\Lambda}{\lambda_{max}} - I_n
+式一：\tilde{\Lambda} = 2 \cdot \frac{\Lambda}{\lambda_{max}} - I_n
 $$
-</Aside>
+
+故而$\theta_{*g}(x)$可以进行如下演算：
+
+$$
+\theta_{*g}(x) &= U \theta(\Lambda) U^T x \\
+            &= U [\Sigma_{k=0}^\infty \theta_k T_k(\tilde{\Lambda})] U^T x
+            &= \Sigma_{k=0}^\infty \theta_k [U T_k(\tilde{\Lambda}) U^T x]
+            &= \Sigma_{k=0}^\infty \theta_k [T_k(U \tilde{\Lambda} U^T)] x 
+$$
+
+带入式一，可得：
+
+$$
+原式 &= \Sigma_{k=0}^\infty \theta_k [T_k(2 \cdot (\frac{L}{\lambda_{max}} - I_n))] x
+    &= \Sigma_{k=0}^\infty \theta_k T_k(\tilde{L}) x
+$$
+
+此时$T_k(\tilde{L})$是定值，可以直接计算。其中为什么$U T_k(\tilde{\Lambda}) U^T = T_k(\tilde{L})$, 可通过数学归纳法进行证明。
