@@ -82,13 +82,93 @@ $$
 H^{(l+1)} = f(H^{(l)}, A) = \sigma(\hat{D}^{-\frac{1}{2}} \hat{A} \hat{D}^{-\frac{1}{2}} H^{(l)} W^{(l)})
 $$
 
+其中$\hat{A} = I + A$, $\hat{D}$是$\hat{A}$的度矩阵。
+
 ### 数学推导
 
+如果需要理解图卷积，我们需要先理解图拉普拉斯矩阵和图傅里叶变换：
+
+1. 图拉普拉斯矩阵 $Graph Laplacian Matrix L(G)$
+
+我们可以用多种方式表示一个图，可以用邻接矩阵，也可以用关联矩阵$(Incidence Matrix)$：
+
+<Aside type="note" title="关联矩阵">
+在关联矩阵中，每一行表示一个边，每一列表示一个节点。每一行中，边的节点的起点用记为1，边的终点记为-1，我们将这个matrix记为$C$
+
+![关联矩阵](/images/GraphConvolution/Incidence.png)
+</Aside>
+
+图拉普拉斯矩阵具有以下性质：
+<Aside type="note" title="图拉普拉斯矩阵">
+1. L(G)具有以下性质：
+
+(1)L(G)是对称矩阵
+
+(2)L(G)的特征值 $\Lambda$ 非负
+
+(3)L(G)的特征矩阵 $U$ 正交: $U^T U = I$
+
+2. 图拉普拉斯阵与关联矩阵、度矩阵、邻接矩阵的关系：
 $$
-\theta_{*g} x = U \theta(\Lambda)U^T x
+L(G) = C^T C = D - A
 $$
 
-其中$\theta_{*g}$表示图卷积算子，$\theta$表示滤波器，$*g$表示卷积核，$U$是输入数据的Laplace矩阵的特征向量矩阵，$\Lambda$是特征值对角阵。
+![L=D-A的计算方式](/images/GraphConvolution/Laplacian.png)
+
+图拉普拉斯矩阵可被其特征值$\Lambda$和特征向量$U$表示如下：
+$$
+L = U \Lambda U^T
+$$
+
+3. 对称化的拉普拉斯矩阵：
+$$
+L_{sym} = D^{-\frac{1}{2}} L D^{-\frac{1}{2}} = I - D^{-\frac{1}{2}} A D^{-\frac{1}{2}}
+$$
+
+</Aside>
+
+2. 图傅里叶变换
+
+在傅里叶变换中，卷积定理定义了两个函数的卷积方式：
+
+$$
+\mathscr{f} * g = \mathcal{F}^{-1}\{\mathcal{F}\{\mathscr{f}\} \cdot \mathcal{F}\{g\}\}
+$$
+
+在图傅里叶变换中，图傅里叶变换的变换基被定义为：
+$$
+\mathcal{F}(x) = U^T x
+$$
+逆变换基被定义为：
+$$
+\mathcal{F}^{-1} (x) = U x
+$$
+
+那么按照卷积定理，图卷积的公式为：
+
+$$
+\begin{aligned}
+g * \alpha &= \mathcal{F}^{-1}\{\mathcal{F}\{g\} \cdot \mathcal{F}\{\alpha\}\} \\
+&= U(U^T g \cdot U^T \alpha)
+\end{aligned}
+$$
+这里的$g$可以被看做是一个laplacian的函数$g(L)$，是图的特征滤波器，作用一次相当于传播一次周围邻居节点的信息。
+
+又因为$U^T L = U^T U \Lambda U^T = \Lambda U^T$，以我们可以把 $U^T g$ 看成是图拉普拉斯矩阵的特征值的函数 $g_{\theta} (\Lambda) = diag(\theta)$  , 参数为 $\theta$ 。
+
+所以图卷积可以被定义成如下公式：
+
+$$
+g_{\theta} * x = U g_{\theta}(\Lambda)U^T x
+$$
+
+3. 图卷积
+
+$$
+g_{\theta} * x = U g_{\theta}(\Lambda)U^T x
+$$
+
+其中$g_{\theta}$表示图卷积算子，$U$是输入数据的Laplace矩阵的特征向量矩阵，$\Lambda$是特征值对角阵。
 
 故$\theta(\Lambda)$可以理解为图数据的频域滤波操作，整个公式可以理解为对图数据进行频域滤波后再进行图傅里叶变换。
 
@@ -113,7 +193,6 @@ $$
 T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_{n+1}(x) = 2xT_n(x)-T_{n-1}(x)
 $$
 </Aside>
-
 
 由Chebyshev多项式的性质，若要将$\theta(\Lambda)$当成多项式进行计算，需将$\Lambda$映射到$[-1,1]$，故对$\Lambda$进行如下操作：
 
