@@ -1,0 +1,84 @@
+---
+import type { GetStaticPaths, Page } from 'astro'
+import type { CollectionEntry } from 'astro:content'
+
+import { Paginator, PostPreview } from 'astro-pure/components/pages'
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
+
+export const prerender = true
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const allPosts = await getBlogCollection()
+  const techniquePosts = allPosts.filter((post) => post.data.category === 'technique')
+  const sortedPosts = sortMDByDate(techniquePosts)
+
+  return paginate(sortedPosts, {
+    pageSize: config.content.blogPageSize
+  })
+}) satisfies GetStaticPaths
+
+interface Props {
+  page: Page<CollectionEntry<'blog'>>
+}
+
+const { page } = Astro.props
+
+const meta = {
+  description: 'Tutorials and technical practices',
+  title: 'Technique'
+}
+
+const paginationProps = {
+  ...(page.url.prev && {
+    prevUrl: {
+      text: `← Previous Posts`,
+      url: page.url.prev
+    }
+  }),
+  ...(page.url.next && {
+    nextUrl: {
+      text: `Next Posts →`,
+      url: page.url.next
+    }
+  })
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back to Blog' href='/blog' variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <div class='mb-4 flex items-center gap-3'>
+        <Icon name='package' class='size-8' />
+        <div>
+          <h1 class='text-3xl font-medium'>Technique</h1>
+          <p class='text-muted-foreground'>Tutorials and technical practices</p>
+        </div>
+      </div>
+    </div>
+
+    {
+      page.data.length === 0 ? (
+        <p class='mt-8 text-muted-foreground animate'>No posts in this category yet.</p>
+      ) : (
+        <section class='animate mt-8' id='content'>
+          <div class='mb-3 flex justify-between text-sm text-muted-foreground'>
+            <span>Page {page.currentPage}</span>
+            <span>{page.data.length} posts on this page</span>
+          </div>
+          <ul class='flex flex-col gap-y-4 text-start'>
+            {page.data.map((post) => (
+              <li>
+                <PostPreview {post} detailed />
+              </li>
+            ))}
+          </ul>
+          <Paginator {...paginationProps} />
+        </section>
+      )
+    }
+  </main>
+</PageLayout>

@@ -1,0 +1,196 @@
+---
+import type { CollectionEntry } from 'astro:content'
+
+import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
+import { Button, Card, Icon } from 'astro-pure/user'
+import PageLayout from '@/layouts/BaseLayout.astro'
+import config from '@/site-config'
+
+export const prerender = true
+
+// Define category configuration
+const categories = {
+  study: {
+    title: 'Study',
+    description: 'Learning notes and course reviews',
+    icon: 'document',
+    color: 'text-blue-500',
+    bgColor: 'bg-blue-500/10'
+  },
+  technique: {
+    title: 'Technique',
+    description: 'Tutorials and technical practices',
+    icon: 'package',
+    color: 'text-green-500',
+    bgColor: 'bg-green-500/10'
+  },
+  daily: {
+    title: 'Daily',
+    description: 'Daily thoughts and life musings',
+    icon: 'sun',
+    color: 'text-yellow-500',
+    bgColor: 'bg-yellow-500/10'
+  },
+  'monthly-report': {
+    title: 'Monthly Report',
+    description: 'Monthly reviews and future plans',
+    icon: 'calendar',
+    color: 'text-purple-500',
+    bgColor: 'bg-purple-500/10'
+  }
+} as const
+
+type CategoryKey = keyof typeof categories
+
+// Get all posts and count posts per category
+const allPosts = await getBlogCollection()
+const categoryCounts: Record<string, number> = {}
+
+for (const catKey of Object.keys(categories) as CategoryKey[]) {
+  categoryCounts[catKey] = allPosts.filter((post) => post.data.category === catKey).length
+}
+
+const totalPosts = allPosts.length
+
+// Build tag collections: group posts by configured tags only
+const configuredCollections = (config.content as any).collections || []
+const tagCollections: Record<string, CollectionEntry<'blog'>[]> = {}
+
+for (const post of allPosts) {
+  const tags = post.data.tags || []
+  for (const tag of tags) {
+    // Only include tags that are in the configured collections
+    if (configuredCollections.includes(tag)) {
+      if (!tagCollections[tag]) {
+        tagCollections[tag] = []
+      }
+      tagCollections[tag].push(post)
+    }
+  }
+}
+
+// Sort collections by post count (descending)
+const sortedCollections = Object.entries(tagCollections)
+  .sort(([, a], [, b]) => b.length - a.length)
+
+const meta = {
+  description: 'My blog categories index',
+  title: 'Blog'
+}
+---
+
+<PageLayout {meta}>
+  <Button title='Back' href='/' variant='back' />
+  <main class='mt-6 lg:mt-10'>
+    <div id='content-header' class='animate'>
+      <h1 class='mb-2 mt-6 text-3xl font-medium sm:mt-10'>Blog</h1>
+      <p class='text-muted-foreground'>
+        {totalPosts} {totalPosts === 1 ? 'post' : 'posts'} across {Object.keys(categories).length} categories
+      </p>
+    </div>
+
+    <div class='mt-8 grid gap-y-16 sm:grid-cols-[3fr_1fr] sm:gap-x-8'>
+      <!-- Left: Categories -->
+      <section class='animate' id='categories'>
+        <div class='mb-4 flex justify-between text-sm'>
+          <h2 class='text-lg font-semibold'>Categories</h2>
+          <a href='/archives' data-astro-prefetch class='text-muted-foreground hover:text-foreground'>
+            View all posts by years →
+          </a>
+        </div>
+
+        <div class='flex flex-col gap-4'>
+          <a href='/blog/study' class='group'>
+            <Card class='w-full transition-all duration-300 hover:shadow-md'>
+              <div class='flex items-center gap-4'>
+                <div class='flex size-12 items-center justify-center rounded-xl bg-blue-500/10'>
+                  <Icon name='document' class='size-6 text-blue-500' />
+                </div>
+                <div class='flex-1'>
+                  <h2 class='text-lg font-semibold group-hover:text-primary'>Study</h2>
+                  <p class='text-sm text-muted-foreground'>{categoryCounts.study || 0} {categoryCounts.study === 1 ? 'post' : 'posts'}</p>
+                </div>
+              </div>
+            </Card>
+          </a>
+
+          <a href='/blog/technique' class='group'>
+            <Card class='w-full transition-all duration-300 hover:shadow-md'>
+              <div class='flex items-center gap-4'>
+                <div class='flex size-12 items-center justify-center rounded-xl bg-green-500/10'>
+                  <Icon name='package' class='size-6 text-green-500' />
+                </div>
+                <div class='flex-1'>
+                  <h2 class='text-lg font-semibold group-hover:text-primary'>Technique</h2>
+                  <p class='text-sm text-muted-foreground'>{categoryCounts.technique || 0} {categoryCounts.technique === 1 ? 'post' : 'posts'}</p>
+                </div>
+              </div>
+            </Card>
+          </a>
+
+          <a href='/blog/daily' class='group'>
+            <Card class='w-full transition-all duration-300 hover:shadow-md'>
+              <div class='flex items-center gap-4'>
+                <div class='flex size-12 items-center justify-center rounded-xl bg-yellow-500/10'>
+                  <Icon name='sun' class='size-6 text-yellow-500' />
+                </div>
+                <div class='flex-1'>
+                  <h2 class='text-lg font-semibold group-hover:text-primary'>Daily</h2>
+                  <p class='text-sm text-muted-foreground'>{categoryCounts.daily || 0} {categoryCounts.daily === 1 ? 'post' : 'posts'}</p>
+                </div>
+              </div>
+            </Card>
+          </a>
+
+          <a href='/blog/monthly-report' class='group'>
+            <Card class='w-full transition-all duration-300 hover:shadow-md'>
+              <div class='flex items-center gap-4'>
+                <div class='flex size-12 items-center justify-center rounded-xl bg-purple-500/10'>
+                  <Icon name='calendar' class='size-6 text-purple-500' />
+                </div>
+                <div class='flex-1'>
+                  <h2 class='text-lg font-semibold group-hover:text-primary'>Monthly Report</h2>
+                  <p class='text-sm text-muted-foreground'>{categoryCounts['monthly-report'] || 0} {categoryCounts['monthly-report'] === 1 ? 'post' : 'posts'}</p>
+                </div>
+              </div>
+            </Card>
+          </a>
+        </div>
+      </section>
+
+      <!-- Right: Collections -->
+      <aside class='animate' id='collections'>
+        <h2 class='mb-4 flex items-center text-lg font-semibold'>
+          <Icon name='list' class='me-2 size-5' />
+          Collections
+        </h2>
+        <p class='text-sm text-muted-foreground mb-4'>
+          Group posts by topic
+        </p>
+
+        {sortedCollections.length > 0 ? (
+          <ul class='text-bgColor flex flex-col gap-2'>
+            {sortedCollections.slice(0, 8).map(([tag, posts]) => (
+              <li>
+                <a href={`/tags/${tag}`} class='group'>
+                  <div class='flex items-center justify-between rounded-lg border bg-card px-3 py-2 transition-all hover:border-primary/50 hover:bg-accent/50'>
+                    <span class='text-sm font-medium'>{tag}</span>
+                    <span class='text-xs text-muted-foreground'>{posts.length}</span>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class='text-sm text-muted-foreground'>No collections yet.</p>
+        )}
+
+        {sortedCollections.length > 8 && (
+          <a href='/tags' class='mt-4 block text-sm text-muted-foreground hover:text-foreground'>
+            View all →
+          </a>
+        )}
+      </aside>
+    </div>
+  </main>
+</PageLayout>

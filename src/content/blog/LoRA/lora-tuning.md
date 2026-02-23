@@ -2,7 +2,8 @@
 title: "LoRA微调原理详解：高效的大语言模型适配技术"
 description: "LoRA(Low-Rank Adaptation)微调技术的数学原理、实现细节和应用实践"
 publishDate: 2025-11-17
-tags: ["machine-learning", "deep-learning", "fine-tuning", "lora", "large-language-models", "parameter-efficient"]
+category: study
+tags: ["fine-tuning", "lora", "LLM"]
 comment: true
 ---
 

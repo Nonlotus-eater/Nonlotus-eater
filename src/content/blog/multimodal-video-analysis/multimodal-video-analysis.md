@@ -2,8 +2,8 @@
 title: "Multimodal Video Content Analysis 课程学习报告"
 description: "多模态视频内容分析课程的学习总结，包括视频理解、多模态融合、时序建模等核心技术的学习笔记和实践项目"
 publishDate: 2025-01-09
-tags: ["computer-vision", "multimodal-learning", "video-analysis", "machine-learning", "deep-learning"]
-language: "zh-CN"
+category: study
+tags: ["computer-vision", "multimodal-learning", "video-analysis"]
 draft: false
 comment: true
 ---

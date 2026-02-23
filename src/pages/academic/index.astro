@@ -1,0 +1,120 @@
+---
+import PageLayout from '@/layouts/CommonPage.astro'
+import { Button, Card, Icon, Collapse } from 'astro-pure/user'
+
+const headings = [
+  { depth: 2, slug: 'research-interests', text: 'Research Interests' },
+  { depth: 2, slug: 'publications', text: 'Publications' },
+  { depth: 2, slug: 'education', text: 'Education' },
+  { depth: 2, slug: 'teaching', text: 'Teaching' }
+]
+---
+
+<PageLayout title='Academic' {headings}>
+  <p>Research interests in Graph Condensation, Approximate Nearest Neighbor Search, and Spatio-temporal Data Mining.</p>
+
+  <h2 id='research-interests'>Research Interests</h2>
+  <p>My research focuses on the following areas:</p>
+  <div class='mt-4 grid gap-4 sm:grid-cols-2'>
+    <Card class='p-4'>
+      <div class='flex items-center gap-3'>
+        <div class='flex size-10 items-center justify-center rounded-lg bg-blue-500/10'>
+          <Icon name='link' class='size-5 text-blue-500' />
+        </div>
+        <div>
+          <h3 class='font-semibold'>Graph Condensation</h3>
+          <p class='text-sm text-muted-foreground'>Dataset compression for GNNs</p>
+        </div>
+      </div>
+    </Card>
+
+    <Card class='p-4'>
+      <div class='flex items-center gap-3'>
+        <div class='flex size-10 items-center justify-center rounded-lg bg-green-500/10'>
+          <Icon name='search' class='size-5 text-green-500' />
+        </div>
+        <div>
+          <h3 class='font-semibold'>ANN Search</h3>
+          <p class='text-sm text-muted-foreground'>Efficient similarity search</p>
+        </div>
+      </div>
+    </Card>
+
+    <Card class='p-4'>
+      <div class='flex items-center gap-3'>
+        <div class='flex size-10 items-center justify-center rounded-lg bg-purple-500/10'>
+          <Icon name='list' class='size-5 text-purple-500' />
+        </div>
+        <div>
+          <h3 class='font-semibold'>Spatio-temporal Mining</h3>
+          <p class='text-sm text-muted-foreground'>Time-series analysis</p>
+        </div>
+      </div>
+    </Card>
+
+    <Card class='p-4'>
+      <div class='flex items-center gap-3'>
+        <div class='flex size-10 items-center justify-center rounded-lg bg-orange-500/10'>
+          <Icon name='search' class='size-5 text-orange-500' />
+        </div>
+        <div>
+          <h3 class='font-semibold'>Deep Learning</h3>
+          <p class='text-sm text-muted-foreground'>Neural network architectures</p>
+        </div>
+      </div>
+    </Card>
+  </div>
+
+  <h2 id='publications'>Publications</h2>
+  <Collapse title='2024'>
+    <div class='mt-3 flex flex-col gap-3'>
+      <Card class='p-4'>
+        <h3 class='font-semibold'>Graph Condensation: A Survey</h3>
+        <p class='text-sm text-muted-foreground'>
+          <strong>Author Name</strong>, Co-author Name
+        </p>
+        <p class='mt-2 text-sm'>Conference/Journal Name, 2024</p>
+        <div class='mt-3 flex gap-2'>
+          <Button title='PDF' href='#' variant='pill' class='text-xs' />
+          <Button title='Code' href='#' variant='pill' class='text-xs' />
+        </div>
+      </Card>
+    </div>
+  </Collapse>
+
+  <Collapse title='2023'>
+    <p class='text-sm text-muted-foreground'>Coming soon...</p>
+  </Collapse>
+
+  <h2 id='education'>Education</h2>
+  <div class='mt-4 flex flex-col gap-4'>
+    <Card class='p-4'>
+      <div class='flex items-start justify-between'>
+        <div>
+          <h3 class='font-semibold'>Master of Computer Science</h3>
+          <p class='text-muted-foreground'>University Name</p>
+          <p class='mt-1 text-sm text-muted-foreground'>2024 - 2026 (Expected)</p>
+        </div>
+        <Icon name='document' class='size-6 text-muted-foreground' />
+      </div>
+    </Card>
+
+    <Card class='p-4'>
+      <div class='flex items-start justify-between'>
+        <div>
+          <h3 class='font-semibold'>Bachelor of Computer Science</h3>
+          <p class='text-muted-foreground'>University Name</p>
+          <p class='mt-1 text-sm text-muted-foreground'>2020 - 2024</p>
+        </div>
+        <Icon name='document' class='size-6 text-muted-foreground' />
+      </div>
+    </Card>
+  </div>
+
+  <h2 id='teaching'>Teaching</h2>
+  <p class='text-sm text-muted-foreground'>Teaching assistant for:</p>
+  <ul class='mt-2 list-disc pl-5 text-sm'>
+    <li>CS101 - Introduction to Computer Science (Fall 2024)</li>
+    <li>CS201 - Data Structures (Spring 2024)</li>
+  </ul>
+</PageLayout>

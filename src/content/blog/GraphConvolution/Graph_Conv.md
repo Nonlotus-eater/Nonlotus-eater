@@ -1,23 +1,11 @@
 ---
-title: "GConv-S 图卷积原理及模型应用"
+title: "GCN 图卷积原理及模型应用"
 description: "Graph Convolution & its application"
 publishDate: 2025-11-17
-tags: ["machine-learning", "deep-learning", "fine-tuning", "lora", "large-language-models", "parameter-efficient"]
+category: study
+tags: ["Graph", "GCN"]
 comment: true
 ---
-
-import { Aside } from 'astro-pure/user'
-import remarkMath from 'remark-math'
-import rehypeKatex from 'rehype-katex'
-
-{/* console.log(
-  String(
-    await compile(await fs.readFile('Graph_Conv.mdx'), {
-      rehypePlugins: [rehypeKatex],
-      remarkPlugins: [remarkMath]
-    })
-  )
-) */}
 
 ## 图卷积发展简介
 
@@ -32,9 +20,9 @@ import rehypeKatex from 'rehype-katex'
 具体而言，通过为图节点赋予空间坐标，将图结构转换为类似于图像的规则网格表示，再应用传统的CNN架构。
 
 缺点：
-   
+
    1. 无法有效处理边权
-   2. 导致图拓扑结构失真（强制将非欧氏空间的图数据嵌入到欧氏空间） 
+   2. 导致图拓扑结构失真（强制将非欧氏空间的图数据嵌入到欧氏空间）
    3. 无法保证卷积操作的平移不变性
 
 ### 频域方法
@@ -56,28 +44,29 @@ $$
 它的物理含义是：将融入前一层自身信息和邻居节点信息的图加权求和后进行线性变换$W$和非线性变换$\sigma$。
 其中$\hat{A} = I + A$, $\hat{D}^{-\frac{1}{2}} \hat{A} \hat{D}^{-\frac{1}{2}}$是对$\hat{A}$的对称归一化。
 
-<Aside type="tip" title="为什么给邻接矩阵添加自环">
-在最简单的情况下，我们将邻接矩阵和每层的嵌入直接相乘，即$AH$，根据矩阵的运算公式，我们可以发现它的意义就是快速将相邻的节点的信息相加得到自己下一层的输入。
+> **为什么给邻接矩阵添加自环**
+>
+> 在最简单的情况下，我们将邻接矩阵和每层的嵌入直接相乘，即$AH$，根据矩阵的运算公式，我们可以发现它的意义就是快速将相邻的节点的信息相加得到自己下一层的输入。
+>
+> 然而，这样的操作虽然获得了周围节点的信息，但是节点本身的信息却没了，因此需要添加自环：
+> $$
+> \hat{A} = I + A
+> $$
 
-然而，这样的操作虽然获得了周围节点的信息，但是节点本身的信息却没了，因此需要添加自环：
-$$
-\hat{A} = I + A
-$$
-</Aside>
-
-<Aside type="tip" title="为什么对邻接矩阵进行对称归一化">
-如果每层都将采用邻接矩阵和每层的嵌入直接相乘的方法，很明显每层的输出会不断增大，即特征向量$X$的scale与输入的差别会越来越大。
-所以我们可以将$A$的每一行除以每一行的和，这里每一行的和就是每个节点的度，最终我们可以得到归一化的$A$:
-$$
-A = D^{-1} A , A_{ij} = \frac{A_{ij}}{d_i}
-$$
-在实际运用中，图卷积采用了对称归一化：
-$$
-A = D^{-\frac{1}{2}} A D^{-\frac{1}{2}} , A_{ij} = \frac{A_{ij}}{\sqrt{d_i} \sqrt{d_j}}
-$$
-</Aside>
+> **为什么对邻接矩阵进行对称归一化**
+>
+> 如果每层都将采用邻接矩阵和每层的嵌入直接相乘的方法，很明显每层的输出会不断增大，即特征向量$X$的scale与输入的差别会越来越大。
+> 所以我们可以将$A$的每一行除以每一行的和，这里每一行的和就是每个节点的度，最终我们可以得到归一化的$A$:
+> $$
+> A = D^{-1} A , A_{ij} = \frac{A_{ij}}{d_i}
+> $$
+> 在实际运用中，图卷积采用了对称归一化：
+> $$
+> A = D^{-\frac{1}{2}} A D^{-\frac{1}{2}} , A_{ij} = \frac{A_{ij}}{\sqrt{d_i} \sqrt{d_j}}
+> $$
 
 将这两个技巧结合起来，可以得到：
+
 $$
 H^{(l+1)} = f(H^{(l)}, A) = \sigma(\hat{D}^{-\frac{1}{2}} \hat{A} \hat{D}^{-\frac{1}{2}} H^{(l)} W^{(l)})
 $$
@@ -92,21 +81,23 @@ $$
 
 我们可以用多种方式表示一个图，可以用邻接矩阵，也可以用关联矩阵$(Incidence Matrix)$：
 
-<Aside type="note" title="关联矩阵">
-在关联矩阵中，每一行表示一个边，每一列表示一个节点。每一行中，边的节点的起点用记为1，边的终点记为-1，我们将这个matrix记为$C$
-
-![关联矩阵](/images/GraphConvolution/Incidence.png)
-</Aside>
+> **关联矩阵**
+>
+> 在关联矩阵中，每一行表示一个边，每一列表示一个节点。每一行中，边的节点的起点用记为1，边的终点记为-1，我们将这个matrix记为$C$
+>
+> ![关联矩阵](/images/GraphConvolution/Incidence.png)
 
 图拉普拉斯矩阵具有以下性质：
-<Aside type="note" title="图拉普拉斯矩阵">
-1. L(G)具有以下性质：
 
-(1)L(G)是对称矩阵
-
-(2)L(G)的特征值 $\Lambda$ 非负
-
-(3)L(G)的特征矩阵 $U$ 正交: $U^T U = I$
+> **图拉普拉斯矩阵**
+>
+> 1. L(G)具有以下性质：
+>
+> (1)L(G)是对称矩阵
+>
+> (2)L(G)的特征值 $\Lambda$ 非负
+>
+> (3)L(G)的特征矩阵 $U$ 正交: $U^T U = I$
 
 2. 图拉普拉斯阵与关联矩阵、度矩阵、邻接矩阵的关系：
 $$
@@ -124,8 +115,6 @@ $$
 $$
 L_{sym} = D^{-\frac{1}{2}} L D^{-\frac{1}{2}} = I - D^{-\frac{1}{2}} A D^{-\frac{1}{2}}
 $$
-
-</Aside>
 
 2. 图傅里叶变换
 
@@ -152,6 +141,7 @@ g * \alpha &= \mathcal{F}^{-1}\{\mathcal{F}\{g\} \cdot \mathcal{F}\{\alpha\}\} \
 &= U(U^T g \cdot U^T \alpha)
 \end{aligned}
 $$
+
 这里的$g$可以被看做是一个laplacian的函数$g(L)$，是图的特征滤波器，作用一次相当于传播一次周围邻居节点的信息。
 
 又因为$U^T L = U^T U \Lambda U^T = \Lambda U^T$，以我们可以把 $U^T g$ 看成是图拉普拉斯矩阵的特征值的函数 $g_{\theta} (\Lambda) = diag(\theta)$  , 参数为 $\theta$ 。
@@ -174,7 +164,7 @@ $$
 
 其中对称归一化的Laplace矩阵满足以下性质：
 
-$$ 
+$$
 L = I_n - D^{-\frac{1}{2}} W D^{-\frac{1}{2}}
 $$
 
@@ -182,17 +172,17 @@ $$
 
 然而，$U \theta(\Lambda)U^T$的时间复杂度达到了$O(n^3)$，运算代价太大，最好的简化方法是将$\theta(\Lambda)$当成多项式进行计算，此时需要有一种能够近似频域滤波图的多项式，这里图卷积采用了Chebyshev多项式进行近似。
 
-<Aside type="note" title="Chebyshev多项式">
-图卷积使用到多项式的性质如下：
-
-$$
-对\forall x \in [-1,1], \exists f(x), 满足 f(x) \approx \Sigma_{k=0}^\infty \theta_k T_k(x)
-$$
-其中
-$$
-T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_{n+1}(x) = 2xT_n(x)-T_{n-1}(x)
-$$
-</Aside>
+> **Chebyshev多项式**
+>
+> 图卷积使用到多项式的性质如下：
+>
+> $$
+> 对\forall x \in [-1,1], \exists f(x), 满足 f(x) \approx \Sigma_{k=0}^\infty \theta_k T_k(x)
+> $$
+> 其中
+> $$
+> T_0(x)=1, T_1(x)=x, T_2(x)=2xT_1(x)-T_0(x),...,T_{n+1}(x) = 2xT_n(x)-T_{n-1}(x)
+> $$
 
 由Chebyshev多项式的性质，若要将$\theta(\Lambda)$当成多项式进行计算，需将$\Lambda$映射到$[-1,1]$，故对$\Lambda$进行如下操作：
 
