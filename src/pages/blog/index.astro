@@ -4,9 +4,11 @@ import type { CollectionEntry } from 'astro:content'
 import { getBlogCollection, sortMDByDate } from 'astro-pure/server'
 import { Button, Card, Icon } from 'astro-pure/user'
 import PageLayout from '@/layouts/BaseLayout.astro'
-import config from '@/site-config'
 
 export const prerender = true
+
+// Define collections configuration directly
+const configuredCollections = ['graph']
 
 // Define category configuration
 const categories = {
@@ -53,7 +55,6 @@ for (const catKey of Object.keys(categories) as CategoryKey[]) {
 const totalPosts = allPosts.length
 
 // Build tag collections: group posts by configured tags only
-const configuredCollections = (config.content as any).collections || []
 const tagCollections: Record<string, CollectionEntry<'blog'>[]> = {}
 
 for (const post of allPosts) {
