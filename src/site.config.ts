@@ -3,7 +3,7 @@ import type { CardListData, Config, IntegrationUserConfig, ThemeUserConfig } fro
 export const theme: ThemeUserConfig = {
   // === Basic configuration ===
   /** Title for your website. Will be used in metadata and as browser tab title. */
-  title: 'Nonlotus-eater\'s Blog',
+  title: 'Fridge\'s Blog',
   /** Will be used in index page & copyright declaration */
   author: 'Mr.Fridge',
   /** Description metadata for your website. Can be used in page metadata. */
@@ -48,6 +48,7 @@ export const theme: ThemeUserConfig = {
   header: {
     menu: [
       { title: 'Blog', link: '/blog' },
+      { title: 'Academic', link: '/academic' },
       { title: 'Projects', link: '/projects' },
       { title: 'Links', link: '/links' },
       { title: 'About', link: '/about' }
