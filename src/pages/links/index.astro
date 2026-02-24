@@ -21,20 +21,11 @@ const linkEditPage = 'https://github.com/Nonlotus-eater/Nonlotus-eater/blob/main
 <PageLayout title='Links' {headings} comment>
   <p>超级感谢这些优秀的博客模板作者，模板做的超级好！</p>
 
-  <h2 id='blog-template-author'>Blog Template Author</h2>
-  <FriendList list={friends[0]} />
-
   <h2 id='common-links'>Common Links</h2>
   <p>我的朋友们，目前还没有添加链接~</p>
 
-  <Collapse title='Links with Bad Status'>
-    <FriendList list={friends[2]} />
-  </Collapse>
-  <Collapse title='Link History Book'>
-    <Timeline events={linksConf.logbook} />
-  </Collapse>
-  <h2 id='special-links'>Special Links</h2>
-  <FriendList list={friends[3]} />
+  <h2 id='blog-template-author'>Blog Template Author</h2>
+  <FriendList list={friends[1]} />
 
   <!-- apply-links -->
   <h2 id='apply-links'>Apply Links</h2>
