@@ -1,5 +1,6 @@
 ﻿---
 title: "在autodl上搭建Codex日志"
+description: "无 GUI 远程 Linux 服务器搭通 Codex 的完整排查记录"
 publishDate: 2026-03-23
 category: technique
 tags: ["codex", "linux", "remote-ssh", "autodl"]
