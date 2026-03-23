@@ -98,6 +98,7 @@ const typographyConfig = {
     // Inline code
     ...(typographyCustom.inlineCodeBlockStyle === 'modern' && {
       ':not(pre) > code': {
+        color: fg,
         padding: '0.3em 0.5em',
         border: '1px solid hsl(var(--border) / 1)',
         'border-radius': 'var(--radius)',
@@ -133,6 +134,7 @@ const typographyConfig = {
       color: fg
     },
     'code:not(pre code)': {
+      color: fg,
       'white-space': 'pre-wrap!important',
       'word-break': 'break-all!important'
     }
