@@ -8,7 +8,14 @@ import PageLayout from '@/layouts/BaseLayout.astro'
 export const prerender = true
 
 // Define collections configuration directly
-const configuredCollections = ['graph']
+const configuredCollections = ['agent']
+
+const collectionMeta: Record<string, { title: string; description: string }> = {
+  agent: {
+    title: 'Agent',
+    description: 'Agent learning notes'
+  }
+}
 
 // Define category configuration
 const categories = {
@@ -72,6 +79,7 @@ for (const post of allPosts) {
 
 // Sort collections by post count (descending)
 const sortedCollections = Object.entries(tagCollections)
+  .map(([tag, posts]) => [tag, sortMDByDate(posts)] as [string, CollectionEntry<'blog'>[]])
   .sort(([, a], [, b]) => b.length - a.length)
 
 const meta = {
@@ -171,16 +179,36 @@ const meta = {
 
         {sortedCollections.length > 0 ? (
           <ul class='text-bgColor flex flex-col gap-2'>
-            {sortedCollections.slice(0, 8).map(([tag, posts]) => (
-              <li>
-                <a href={`/tags/${tag}`} class='group'>
-                  <div class='flex items-center justify-between rounded-lg border bg-card px-3 py-2 transition-all hover:border-primary/50 hover:bg-accent/50'>
-                    <span class='text-sm font-medium'>{tag}</span>
-                    <span class='text-xs text-muted-foreground'>{posts.length}</span>
-                  </div>
-                </a>
-              </li>
-            ))}
+            {sortedCollections.slice(0, 8).map(([tag, posts]) => {
+              const collection = collectionMeta[tag] || {
+                title: tag,
+                description: 'Learning notes'
+              }
+
+              return (
+                <li>
+                  <details class='group rounded-lg border bg-card transition-all open:border-primary/50 open:bg-accent/30'>
+                    <summary class='flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2'>
+                      <span>
+                        <span class='block text-sm font-medium group-hover:text-primary'>{collection.title}</span>
+                        <span class='block text-xs text-muted-foreground'>{collection.description}</span>
+                      </span>
+                      <span class='text-xs text-muted-foreground'>{posts.length}</span>
+                    </summary>
+                    <ul class='border-t px-3 py-2'>
+                      {posts.map((post) => (
+                        <li class='py-2'>
+                          <a href={`/blog/${post.id}`} class='block hover:text-primary'>
+                            <span class='block text-sm font-medium'>{post.data.title}</span>
+                            <span class='mt-1 block text-xs text-muted-foreground'>{post.data.description}</span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              )
+            })}
           </ul>
         ) : (
           <p class='text-sm text-muted-foreground'>No collections yet.</p>
